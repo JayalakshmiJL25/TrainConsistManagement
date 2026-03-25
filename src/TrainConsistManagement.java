@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 class Bogie {
     private String name;
@@ -37,25 +35,21 @@ public class TrainConsistManagement {
 
         passengerBogies.add(new Bogie("Sleeper", 72));
         passengerBogies.add(new Bogie("AC Chair", 56));
-        passengerBogies.add(new Bogie("Sleeper", 72));      // duplicate type
         passengerBogies.add(new Bogie("First Class", 40));
-        passengerBogies.add(new Bogie("AC Chair", 56));     // duplicate type
+        passengerBogies.add(new Bogie("Luxury Coach", 80));
 
-        System.out.println("\nOriginal Bogie List:");
+        System.out.println("\nPassenger Bogies:");
         passengerBogies.forEach(System.out::println);
 
-        // Grouping by bogie type (name)
-        Map<String, List<Bogie>> groupedBogies = passengerBogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getName));
+        // Stream aggregation using map() and reduce()
+        int totalSeats = passengerBogies.stream()
+                .map(b -> b.getCapacity())     // Extract numeric capacity
+                .reduce(0, Integer::sum);      // Aggregate using reduce
 
-        System.out.println("\nGrouped Bogies by Type:");
-
-        groupedBogies.forEach((type, bogies) -> {
-            System.out.println(type + " -> " + bogies);
-        });
+        System.out.println("\nTotal Seating Capacity of Train: " + totalSeats);
 
         // Verify original list unchanged
-        System.out.println("\nOriginal List After Grouping (Unchanged):");
+        System.out.println("\nOriginal List After Aggregation (Unchanged):");
         passengerBogies.forEach(System.out::println);
 
         System.out.println("\nProgram continues...");
