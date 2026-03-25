@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class Bogie {
     private String name;
@@ -31,26 +31,31 @@ public class TrainConsistManagement {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Create List to store Bogie objects
+        // Reusing Bogie list (similar to UC7)
         List<Bogie> passengerBogies = new ArrayList<>();
 
-        // Add passenger bogies
         passengerBogies.add(new Bogie("Sleeper", 72));
         passengerBogies.add(new Bogie("AC Chair", 56));
         passengerBogies.add(new Bogie("First Class", 40));
+        passengerBogies.add(new Bogie("Luxury Coach", 80));
 
-        System.out.println("\nBefore Sorting:");
-        for (Bogie bogie : passengerBogies) {
-            System.out.println(bogie);
-        }
+        System.out.println("\nOriginal Bogie List:");
+        passengerBogies.forEach(System.out::println);
 
-        // Sort bogies by capacity (ascending order)
-        passengerBogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+        // Define capacity threshold
+        int threshold = 70;
 
-        System.out.println("\nAfter Sorting by Capacity (Ascending):");
-        for (Bogie bogie : passengerBogies) {
-            System.out.println(bogie);
-        }
+        // Stream Filtering (capacity > threshold)
+        List<Bogie> filteredBogies = passengerBogies.stream()
+                .filter(b -> b.getCapacity() > threshold)
+                .collect(Collectors.toList());
+
+        System.out.println("\nFiltered Bogies (Capacity > " + threshold + "):");
+        filteredBogies.forEach(System.out::println);
+
+        // Verify original list unchanged
+        System.out.println("\nOriginal List After Filtering (Unchanged):");
+        passengerBogies.forEach(System.out::println);
 
         System.out.println("\nProgram continues...");
     }
