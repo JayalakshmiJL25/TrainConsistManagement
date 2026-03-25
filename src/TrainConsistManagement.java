@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 class Bogie {
@@ -21,7 +22,7 @@ class Bogie {
 
     @Override
     public String toString() {
-        return "Bogie: " + name + " | Capacity: " + capacity;
+        return name + " (" + capacity + ")";
     }
 }
 
@@ -31,30 +32,30 @@ public class TrainConsistManagement {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Reusing Bogie list (similar to UC7)
+        // Reuse Bogie list
         List<Bogie> passengerBogies = new ArrayList<>();
 
         passengerBogies.add(new Bogie("Sleeper", 72));
         passengerBogies.add(new Bogie("AC Chair", 56));
+        passengerBogies.add(new Bogie("Sleeper", 72));      // duplicate type
         passengerBogies.add(new Bogie("First Class", 40));
-        passengerBogies.add(new Bogie("Luxury Coach", 80));
+        passengerBogies.add(new Bogie("AC Chair", 56));     // duplicate type
 
         System.out.println("\nOriginal Bogie List:");
         passengerBogies.forEach(System.out::println);
 
-        // Define capacity threshold
-        int threshold = 70;
+        // Grouping by bogie type (name)
+        Map<String, List<Bogie>> groupedBogies = passengerBogies.stream()
+                .collect(Collectors.groupingBy(Bogie::getName));
 
-        // Stream Filtering (capacity > threshold)
-        List<Bogie> filteredBogies = passengerBogies.stream()
-                .filter(b -> b.getCapacity() > threshold)
-                .collect(Collectors.toList());
+        System.out.println("\nGrouped Bogies by Type:");
 
-        System.out.println("\nFiltered Bogies (Capacity > " + threshold + "):");
-        filteredBogies.forEach(System.out::println);
+        groupedBogies.forEach((type, bogies) -> {
+            System.out.println(type + " -> " + bogies);
+        });
 
         // Verify original list unchanged
-        System.out.println("\nOriginal List After Filtering (Unchanged):");
+        System.out.println("\nOriginal List After Grouping (Unchanged):");
         passengerBogies.forEach(System.out::println);
 
         System.out.println("\nProgram continues...");
